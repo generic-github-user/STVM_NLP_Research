@@ -148,3 +148,14 @@ def nn(tr_list, imdb_tr_list, te_list, imdb_te_list, xla=False):
     te_acc = _acc * 100.
     return tr_acc, te_acc, weights
 
+def wrap_nn(xla=None, *args, **kwargs):
+    if xla is None:
+        xla = USE_XLA
+    
+#     if xla:
+#         output = tf.function(nn, jit_compile=True)(*args, **kwargs)
+#     else:
+#         output = nn(*args, **kwargs)
+    output = nn(*args, **kwargs)
+
+    return output
