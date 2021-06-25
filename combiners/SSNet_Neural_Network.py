@@ -80,6 +80,34 @@ def prep_data(TR_SAMPLE_SIZE, TR_PROBA, imdb_tr_list, tr_list):
         
     return train_x, train_y
 
+def predict(imdb_te_list, te_list, model):
+    TE_SAMPLE_SIZE = len(imdb_te_list)
+    TE_PROBA = len(te_list)
+
+    for idx in range(len(te_list)):
+        print(len(te_list[idx]), TE_SAMPLE_SIZE)
+        assert len(te_list[idx]) == TE_SAMPLE_SIZE, "test mismatch samples"
+
+
+    x_predict = np.zeros([len(imdb_te_list), TE_PROBA], dtype=np.float64)
+    y_actual = list()
+
+    for idx in range(TE_SAMPLE_SIZE):
+        ll = imdb_te_list[idx]
+        fn = ll[0]
+        label = int(ll[1])
+
+        x = []
+        for i in range(TE_PROBA):
+            x.append(te_list[i][fn])
+
+        x_ = np.array(x)
+        x_predict[idx] = x_
+        y_actual.append(label)
+    
+    y_pred = model.predict(x_predict)
+    return y_pred, y_actual, TE_SAMPLE_SIZE
+
 memoized_funcs = {}
 
 def jit(F, xla):
@@ -120,32 +148,8 @@ def nn(tr_list, imdb_tr_list, te_list, imdb_te_list, xla=False):
 
     # prediction
 
-    TE_SAMPLE_SIZE = len(imdb_te_list)
-    TE_PROBA = len(te_list)
-
-    for idx in range(len(te_list)):
-        print(len(te_list[idx]), TE_SAMPLE_SIZE)
-        assert len(te_list[idx]) == TE_SAMPLE_SIZE, "test mismatch samples"
-
-
-    x_predict = np.zeros([len(imdb_te_list), TE_PROBA], dtype=np.float64)
-    y_actual = list()
-
-    for idx in range(TE_SAMPLE_SIZE):
-        ll = imdb_te_list[idx]
-        fn = ll[0]
-        label = int(ll[1])
-
-        x = []
-        for i in range(TE_PROBA):
-            x.append(te_list[i][fn])
-
-        x_ = np.array(x)
-        x_predict[idx] = x_
-        y_actual.append(label)
     
-    y_pred = model.predict(x_predict)
-
+    y_pred, y_actual, TE_SAMPLE_SIZE = predict(imdb_te_list, te_list, model)
     correct, wrong = jit(count_predictions, xla)(y_pred, y_actual, TE_SAMPLE_SIZE)
     
     assert (correct + wrong) == TE_SAMPLE_SIZE, "mismatch size"
