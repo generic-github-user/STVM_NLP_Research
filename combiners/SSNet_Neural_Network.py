@@ -33,13 +33,35 @@ L2_ETA = 0.0039
 L2_ETA = [0.0039, 0.041, 0.001]
 L1_ETA = 0.0005
 
-def nn(tr_list, imdb_tr_list, te_list, imdb_te_list):
-    TR_SAMPLE_SIZE = len(imdb_tr_list)
-    TR_PROBA = len(tr_list)
+# Default XLA mode
+# If true, compile the training code with TensorFlow's XLA (Accelerated Linear Algebra), an optimizing compiler
+# If the caller (i.e., the SSNet_predictions script/notebook) does not specify a mode, this value will be used
+# Note that enabling this option will probably produce the best results on a GPU/hardware accelerator, and may increase the upfront computational cost of creating/compiling the model (with the trade-off of improving training and inference time)
+# See https://www.tensorflow.org/xla for more information
+USE_XLA = False
 
-    for idx in range(len(tr_list)):
-        assert len(tr_list[idx]) == TR_SAMPLE_SIZE, "train mismatch samples"
-    
+def count_predictions(yp, ya, TE_SAMPLE):
+    correct_pred = 0
+    wrong_pred = 0
+
+    for idx in range(TE_SAMPLE):
+        if (yp[idx][0] <= 0.5 and ya[idx] == 0) or (yp[idx][0] > 0.5 and ya[idx] == 1):
+            correct_pred += 1
+        else:
+            wrong_pred += 1
+            
+    return correct_pred, wrong_pred
+
+def build_model(L2_ETA, TR_PROBA):
+    model = Sequential()
+    model.add(Dense(1, activation=None, use_bias=False,
+                    kernel_regularizer=tf.keras.regularizers.l2(L2_ETA[0]),
+#                    kernel_regularizer=tf.keras.regularizers.l1(L1_ETA),
+                    kernel_constraint=tf.keras.constraints.NonNeg(), input_shape=(TR_PROBA,)))
+    model.add(Dense(1, activation="sigmoid"))
+    return model
+
+def prep_data(TR_SAMPLE_SIZE, TR_PROBA, imdb_tr_list, tr_list):
     train_x = np.zeros([TR_SAMPLE_SIZE, TR_PROBA], dtype=np.float64)
     train_y = np.array([])
 
@@ -55,13 +77,24 @@ def nn(tr_list, imdb_tr_list, te_list, imdb_te_list):
         x_ = np.array(x)
         train_x[idx] = x_
         train_y = np.append(train_y, label)
+        
+    return train_x, train_y
 
-    model = Sequential()
-    model.add(Dense(1, activation=None, use_bias=False,
-                    kernel_regularizer=tf.keras.regularizers.l2(L2_ETA[0]),
-#                    kernel_regularizer=tf.keras.regularizers.l1(L1_ETA),
-                    kernel_constraint=tf.keras.constraints.NonNeg(), input_shape=(TR_PROBA,)))
-    model.add(Dense(1, activation="sigmoid"))
+def jit(F, xla):
+    if xla:
+        return tf.function(F, jit_compile=True)
+    else:
+        return F
+
+def nn(tr_list, imdb_tr_list, te_list, imdb_te_list, xla=False):
+    TR_SAMPLE_SIZE = len(imdb_tr_list)
+    TR_PROBA = len(tr_list)
+
+    for idx in range(len(tr_list)):
+        assert len(tr_list[idx]) == TR_SAMPLE_SIZE, "train mismatch samples"
+    
+    train_x, train_y = jit(prep_data, xla)(TR_SAMPLE_SIZE, TR_PROBA, imdb_tr_list, tr_list)
+    model = jit(build_model, xla)(L2_ETA, TR_PROBA)
 
     #model.summary()
     model.compile(optimizer='adam', loss='binary_crossentropy',
@@ -81,6 +114,7 @@ def nn(tr_list, imdb_tr_list, te_list, imdb_te_list):
     TE_PROBA = len(te_list)
 
     for idx in range(len(te_list)):
+        print(len(te_list[idx]), TE_SAMPLE_SIZE)
         assert len(te_list[idx]) == TE_SAMPLE_SIZE, "test mismatch samples"
 
 
@@ -102,20 +136,15 @@ def nn(tr_list, imdb_tr_list, te_list, imdb_te_list):
     
     y_pred = model.predict(x_predict)
 
-    correct_pred = 0
-    wrong_pred = 0
-
-    for idx in range(TE_SAMPLE_SIZE):
-        if (y_pred[idx][0] <= 0.5 and y_actual[idx] == 0) or (y_pred[idx][0] > 0.5 and y_actual[idx] == 1):
-            correct_pred = correct_pred + 1
-        else:
-            wrong_pred = wrong_pred + 1
+    correct, wrong = jit(count_predictions, xla)(y_pred, y_actual, TE_SAMPLE_SIZE)
     
-    assert (correct_pred + wrong_pred) == TE_SAMPLE_SIZE, "mismatch size"
+    assert (correct + wrong) == TE_SAMPLE_SIZE, "mismatch size"
 
-    _acc = float(correct_pred)/float(TE_SAMPLE_SIZE)
+    _acc = float(correct)/float(TE_SAMPLE_SIZE)
     #print("Accuracy: ", float(correct_pred)/float(TE_SAMPLE_SIZE))
-    tr_acc = hist.history['acc'][EPOCH-1] * 100.
+#     tr_acc = hist.history['acc'][EPOCH-1] * 100.
+    print(hist.history.keys())
+    tr_acc = hist.history['accuracy'][EPOCH-1] * 100.
     te_acc = _acc * 100.
     return tr_acc, te_acc, weights
 
