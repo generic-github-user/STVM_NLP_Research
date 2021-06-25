@@ -24,8 +24,8 @@ from tensorflow.keras.optimizers import *
 from tensorflow.keras.layers import Dense, Activation, Input
 from tensorflow.keras.models import Sequential
 
-
 import numpy as np
+import numba as nb
 
 EPOCH = 800
 BATCH_SIZE = 512
@@ -81,8 +81,9 @@ def prep_data(TR_SAMPLE_SIZE, TR_PROBA, imdb_tr_list, tr_list):
     return train_x, train_y
 
 def jit(F, xla):
-    if xla:
-        return tf.function(F, jit_compile=True)
+    if xla and F in [prep_data]:
+#         return tf.function(F, jit_compile=True)
+        return nb.jit(F, nopython=True, parallel=True)
     else:
         return F
 
