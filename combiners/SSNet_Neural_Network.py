@@ -80,10 +80,19 @@ def prep_data(TR_SAMPLE_SIZE, TR_PROBA, imdb_tr_list, tr_list):
         
     return train_x, train_y
 
+memoized_funcs = {}
+
 def jit(F, xla):
-    if xla and F in [prep_data]:
+    fn = F.__name__
+    if xla and fn in ['prep_data', 'count_predictions']:
 #         return tf.function(F, jit_compile=True)
-        return nb.jit(F, nopython=True, parallel=True)
+        
+        if fn in memoized_funcs:
+            return memoized_funcs[fn]
+        else:
+            compiled = nb.jit(F, nopython=True, parallel=True)
+            memoized_funcs[fn] = compiled
+            return compiled
     else:
         return F
 
