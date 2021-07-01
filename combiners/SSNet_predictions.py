@@ -39,15 +39,19 @@ from SSNet_Heuristic_Hybrid import heuristic_hybrid
 
 
 imdb_5ktr = 'imdb_train_5k.csv'
-model_a_tr = 'model_a_5ktrain.csv'
-model_b_tr = 'model_b_5ktrain.csv'
-model_c_tr = 'model_c_bert_result_train_5k.csv'
-model_d_tr = 'model_d_use_result_train_5k.csv'
+model_a_tr = 'model_1_5ktrain.csv'
+model_b_tr = 'model_2_5ktrain.csv'
+# model_c_tr = 'model_3_bert_result_train_5k.csv'
+# model_d_tr = 'model_4_use_result_train_5k.csv'
+model_c_tr = 'model_3_5ktrain.csv'
+model_d_tr = 'model_4_5ktrain.csv'
 
-model_a_te = 'model_a_25ktest.csv'
-model_b_te = 'model_b_25ktest.csv'
-model_c_te = 'model_c_bert_result_test_25k.csv'
-model_d_te = 'model_d_use_result_test_25k.csv'
+model_a_te = 'model_1_25ktest.csv'
+model_b_te = 'model_2_25ktest.csv'
+# model_c_te = 'model_3_bert_result_test_25k.csv'
+# model_d_te = 'model_4_use_result_test_25k.csv'
+model_c_te = 'model_3_25ktest.csv'
+model_d_te = 'model_4_25ktest.csv'
 
 
 def get_training_dict_threshold(split):
@@ -106,11 +110,12 @@ def get_training_dict(split):
 
 
 imdb_25k_list = list()
-for file_name in os.listdir('../test/pos'):
+data_dir = 'models/train'
+for file_name in os.listdir(f'../{data_dir}/pos'):
     if file_name != '.DS_Store':
         imdb_25k_list.append([file_name, str(1)])
 
-for file_name in os.listdir('../test/neg'):
+for file_name in os.listdir(f'../{data_dir}/neg'):
     if file_name != '.DS_Store':
         imdb_25k_list.append([file_name, str(0)])
 
