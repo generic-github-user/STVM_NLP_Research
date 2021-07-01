@@ -1,15 +1,19 @@
 import numpy as np
-from keras.utils import plot_model
-from keras.layers import merge
-from keras.layers import BatchNormalization, InputLayer, RepeatVector, Permute
-from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten, Bidirectional
-from keras.models import Sequential, Model
-import tensorflow as tf
-#from tensorflow import keras
-import keras.backend as K
-import keras
+
+# from tensorflow import keras
+# import tensorflow as tf
+
+from tensorflow.keras.utils import plot_model
+# from tensorflow.keras.layers import Merge
+from tensorflow.keras.layers import Concatenate
+from tensorflow.keras.layers import BatchNormalization, InputLayer, RepeatVector, Permute
+from tensorflow.keras.optimizers import *
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten, Bidirectional
+from tensorflow.keras.models import Sequential, Model
+
+import tensorflow.keras.backend as K
+# import keras
 import os
 import pandas as pd
 import random
@@ -19,10 +23,10 @@ from collections import defaultdict
 import zipfile
 import requests
 import re
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 
-model = load_model('model_b_2.h5')
+model = load_model('model_2.h5')
 
 TRAINING_SAMPLE = 5000
 

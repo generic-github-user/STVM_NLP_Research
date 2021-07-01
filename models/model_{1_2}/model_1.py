@@ -1,9 +1,9 @@
-from keras import backend as K
-from keras.layers import BatchNormalization, InputLayer, RepeatVector
-from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten
-from keras.models import Sequential
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import BatchNormalization, InputLayer, RepeatVector
+from tensorflow.keras.optimizers import *
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten
+from tensorflow.keras.models import Sequential
 import math
 import random
 import re
@@ -109,7 +109,7 @@ def load_datasets_from_file():
   # Assumes this script runs from the top directory containing the test and
   # train directory.
   global NUM_WORDS
-  f = open("../imdb.vocab", "r")
+  f = open("../imdb.vocab", "r", encoding="UTF-8")
   imdb_vocab = f.readlines()
   NUM_WORDS = len(imdb_vocab)
   print('Vocabulary size is: %d words' % (NUM_WORDS))

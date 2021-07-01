@@ -1,16 +1,17 @@
 import numpy as np
-from keras.utils import plot_model
-from keras.layers import merge
-from keras.layers import BatchNormalization, InputLayer, RepeatVector, Permute
-from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten, Bidirectional
-from keras.models import Sequential, Model
+from tensorflow.keras.utils import plot_model
+# This layer type seems to be depreciated and is not used in the script
+# from tensorflow.keras.layers import merge
+from tensorflow.keras.layers import BatchNormalization, InputLayer, RepeatVector, Permute
+from tensorflow.keras.optimizers import *
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten, Bidirectional
+from tensorflow.keras.models import Sequential, Model
 import tensorflow as tf
 #from tensorflow import keras
-import keras.backend as K
+import tensorflow.keras.backend as K
 
-import keras
+# import keras
 import os
 import pandas as pd
 import random

@@ -11,12 +11,12 @@ import zipfile
 import requests
 import random
 import math
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout, Input, LSTM
-from keras.callbacks import ModelCheckpoint
-from keras.optimizers import *
-from keras.layers import BatchNormalization, InputLayer, RepeatVector
-from keras.models import load_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, LSTM
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import *
+from tensorflow.keras.layers import BatchNormalization, InputLayer, RepeatVector
+from tensorflow.keras.models import load_model
 
 
 model = load_model('model_a_1.h5')
