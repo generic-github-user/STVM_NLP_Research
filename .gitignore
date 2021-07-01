@@ -1,3 +1,13 @@
 *.txt
 *-checkpoint*
 *.pyc
+=======
+models/train/neg/*.txt
+models/train/pos/*.txt
+*.pyc
+*-checkpoint*
+imdb.vocab
+imdb*.csv
+*.feat
+Untitled.ipynb
+>>>>>>> Stashed changes
