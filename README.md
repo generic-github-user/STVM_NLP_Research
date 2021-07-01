@@ -35,6 +35,15 @@ The project is written using the [TensorFlow](https://www.tensorflow.org/install
 
 The data is downloadable as a `.tar.gz` file which contains text files sorted into positive and negative reviews as well as metadata. For the training and inference code to run properly, `imdb.vocab` should be copied to the `./models` folder (relative to the repository's main directory). If a folder named `train` does not exist in the `models` directory, it will need to be created; then, copy `labeledBow.feat` from the dataset into the `train` folder. Also copy (or move) the `train/neg` and `train/pos` folders from the downloaded data into `train`. This will enable the `model_1...` and `model_2...` scripts to access the training and testing data. Additional preparation may be necessary before training the models or using them to make predictions on the data; see below.
 
+To avoid tracking of the thousands of text files from the dataset, adding a `.gitignore` with the following is recommended if you want to train or run the models yourself.
+
+```
+models/train/neg/*.txt
+models/train/pos/*.txt
+```
+
+If `.pyc` files are generated, adding `*.pyc` on another line is recommended.
+
 ## WorkFlow of SSNet
 Following is the directory structure:
 <img src="images/directory_structure.png" height="20">
