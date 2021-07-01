@@ -21,7 +21,7 @@ SSNet authors and developers:
 '''
 This is master file that runs all the three combiners proposed in the paper. 
 Use following snippet to run all the three combiners: python SSNet_predictions.py
-Please note that this code has tensoflow dependencies.
+Please note that this code has tensorflow dependencies.
 '''
 
 import tensorflow as tf
@@ -68,6 +68,7 @@ def get_training_dict_threshold(split):
 def get_training_dict(split):
     training_dict = dict()
     if split == "5K":
+#         Can this be refactored?
         training_dict["model_{1,2}"] = [
             [model_a_tr, model_b_tr], [model_a_te, model_b_te]
         ]

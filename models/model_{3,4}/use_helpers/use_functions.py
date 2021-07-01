@@ -1,10 +1,10 @@
 ## Universal Sentence Encoder helper functions
 import tensorflow_hub as hub
 import tensorflow as tf
-from keras.models import Sequential
-from keras.layers import Conv1D, Dropout, Dense, Flatten, LSTM, MaxPooling1D, Bidirectional
-from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv1D, Dropout, Dense, Flatten, LSTM, MaxPooling1D, Bidirectional
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 ## Modelling
 def get_model(callable_object, class_num, arch_type):
     vector_size = 512
