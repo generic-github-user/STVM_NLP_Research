@@ -16,6 +16,7 @@ import numpy as np
 import glob
 import string
 
+
 # In[44]:
 
 
@@ -41,3 +42,22 @@ for category, value in [('neg', 0), ('pos', 1)]:
             labels.append(value)
             if i < 5:
                 print(i, content[:200]+'...', '\n')
+
+def encode_char(c):
+    try:
+        return charlist.index(c)
+    except:
+        return len(charlist)
+        
+encoded = []
+max_len = max([len(d) for d in dataset])
+print(max_len)
+for i, d in enumerate(dataset):
+    s = ' ' * (max_len - len(d))
+    d = d + s
+#     try:
+    encoded.append(tf.one_hot([encode_char(c) for c in d], len(charlist)+1))
+#     except Exception as e:
+#         print('Encoding error:')
+#         print(d, e, '\n')
+    dataset[i] = d
