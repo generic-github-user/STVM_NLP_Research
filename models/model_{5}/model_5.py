@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[94]:
 
 
 # Convert this notebook to a Python script and save as a new file
@@ -25,65 +25,75 @@ charlist = string.ascii_lowercase + ' \n' + string.digits
 print(charlist)
 
 
-# In[78]:
+# In[108]:
 
 
-dataset = []
-labels = []
-
-# TODO: move into function
-# Loop through categories
-for category, value in [('neg', 0), ('pos', 1)]:
-#     Get list of files in dataset and truncate
-    filenames = glob.glob(f'../train/{category}/*.txt')[:100]
-    for i, f in enumerate(filenames):
-        with open(f) as textfile:
-            p = string.punctuation
-#             Get text data and remove punctuation
-            content = textfile.read().translate(str.maketrans(p, ' '*len(p)))
-#             Convert to lowercase
-            content = content.lower()
-#             Replace spans of whitespace with single spaces
-            content = ' '.join(content.split())
+def load_data(start=0, stop=100, log=False):
+    dataset = []
+    labels = []
     
-#             Add x and y to corresponding data lists
-            dataset.append(content)
-            labels.append(value)
-            if i < 5:
-                print(i, content[:200]+'...', '\n')
+    # Loop through categories
+    for category, value in [('neg', 0), ('pos', 1)]:
+    #     Get list of files in dataset and truncate
+        filenames = glob.glob(f'../train/{category}/*.txt')[start:stop]
+        for i, f in enumerate(filenames):
+            with open(f) as textfile:
+                p = string.punctuation
+    #             Get text data and remove punctuation
+                content = textfile.read().translate(str.maketrans(p, ' '*len(p)))
+    #             Convert to lowercase
+                content = content.lower()
+    #             Replace spans of whitespace with single spaces
+                content = ' '.join(content.split())
+
+    #             Add x and y to corresponding data lists
+                dataset.append(content)
+                labels.append(value)
+                if i < 5 and log:
+                    print(i, content[:200]+'...', '\n')
+    
+    return dataset, labels
+
+
+# In[109]:
+
 
 def encode_char(c):
     try:
         return charlist.index(c)
     except:
         return len(charlist)
-        
-encoded = []
-max_len = max([len(d) for d in dataset])
-print(max_len)
-for i, d in enumerate(dataset):
-    s = ' ' * (max_len - len(d))
-    d = d + s
-#     try:
-    encoded.append(tf.one_hot([encode_char(c) for c in d], len(charlist)+1))
-#     except Exception as e:
-#         print('Encoding error:')
-#         print(d, e, '\n')
-    dataset[i] = d
 
 
-# In[79]:
+# In[110]:
 
 
-A = np.array(encoded)
-encoded = A
-print(A.shape, A.size)
+def prep_data(*args, **kwargs):
+    X, Y = load_data(*args, **kwargs)
+    encoded = []
+    max_len = max([len(d) for d in X])
+    print(max_len)
+    for i, d in enumerate(X):
+        s = ' ' * (max_len - len(d))
+        d = d + s
+    #     try:
+        encoded.append(tf.one_hot([encode_char(c) for c in d], len(charlist)+1))
+    #     except Exception as e:
+    #         print('Encoding error:')
+    #         print(d, e, '\n')
+        X[i] = d
 
-labels = np.array(labels)
-print(labels.shape)
+    X = np.array(encoded)
+#     encoded = A
+    print(X.shape, X.size)
+
+    Y = np.array(Y)
+    print(Y.shape)
+    
+    return X, Y
 
 
-# In[87]:
+# In[114]:
 
 
 model = tf.keras.models.Sequential([
@@ -94,7 +104,7 @@ model = tf.keras.models.Sequential([
 model.summary()
 
 
-# In[88]:
+# In[115]:
 
 
 model.compile(
@@ -103,10 +113,11 @@ model.compile(
 )
 
 
-# In[89]:
+# In[ ]:
 
 
-model.fit(encoded, labels, epochs=5, batch_size=16)
+X, Y = prep_data(0, 100)
+model.fit(X, Y, epochs=5, batch_size=16)
 
 
 # In[91]:
