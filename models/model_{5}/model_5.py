@@ -92,3 +92,25 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(1, activation=tf.keras.activations.sigmoid)
 ])
 model.summary()
+
+
+# In[88]:
+
+
+model.compile(
+    optimizer=tf.keras.optimizers.Adagrad(learning_rate=0.01),
+    loss=tf.keras.losses.binary_crossentropy,
+)
+
+
+# In[89]:
+
+
+model.fit(encoded, labels, epochs=5, batch_size=16)
+
+
+# In[91]:
+
+
+model(encoded[:1])
+
