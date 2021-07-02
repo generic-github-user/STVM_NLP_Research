@@ -81,3 +81,14 @@ print(A.shape, A.size)
 
 labels = np.array(labels)
 print(labels.shape)
+
+
+# In[87]:
+
+
+model = tf.keras.models.Sequential([
+    tf.keras.layers.LSTM(20, input_shape=(5850, 39)),
+    tf.keras.layers.Dense(40, activation=tf.keras.activations.tanh),
+    tf.keras.layers.Dense(1, activation=tf.keras.activations.sigmoid)
+])
+model.summary()
