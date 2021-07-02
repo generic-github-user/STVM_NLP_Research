@@ -5,7 +5,15 @@
 # 
 # This notebook is meant for hands-on interaction with the code and data used in `SSNet_predictions.py`. Annotations explaining the general functioning of each section and the other modules they reference are provided. Similar notebooks may be added for individual models and combiners in the future. Note that the code shown here does not necessarily reflect the content of the script version.
 
-# # License
+# This cell can be run to easily convert this notebook to a Python script:
+
+# In[ ]:
+
+
+get_ipython().system('jupyter nbconvert --to script SSNet_predictions_notebook.ipynb')
+
+
+# ## License
 
 # In[1]:
 
