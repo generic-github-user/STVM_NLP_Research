@@ -4,6 +4,7 @@
 # In[ ]:
 
 
+# Convert this notebook to a Python script and save as a new file
 get_ipython().system('jupyter nbconvert --to script model_5.ipynb')
 
 
@@ -17,7 +18,7 @@ import glob
 import string
 
 
-# In[44]:
+# In[93]:
 
 
 charlist = string.ascii_lowercase + ' \n' + string.digits
@@ -30,14 +31,22 @@ print(charlist)
 dataset = []
 labels = []
 
+# TODO: move into function
+# Loop through categories
 for category, value in [('neg', 0), ('pos', 1)]:
+#     Get list of files in dataset and truncate
     filenames = glob.glob(f'../train/{category}/*.txt')[:100]
     for i, f in enumerate(filenames):
         with open(f) as textfile:
             p = string.punctuation
+#             Get text data and remove punctuation
             content = textfile.read().translate(str.maketrans(p, ' '*len(p)))
+#             Convert to lowercase
             content = content.lower()
+#             Replace spans of whitespace with single spaces
             content = ' '.join(content.split())
+    
+#             Add x and y to corresponding data lists
             dataset.append(content)
             labels.append(value)
             if i < 5:
