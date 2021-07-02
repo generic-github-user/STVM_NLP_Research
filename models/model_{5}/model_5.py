@@ -70,3 +70,14 @@ for i, d in enumerate(dataset):
 #         print('Encoding error:')
 #         print(d, e, '\n')
     dataset[i] = d
+
+
+# In[79]:
+
+
+A = np.array(encoded)
+encoded = A
+print(A.shape, A.size)
+
+labels = np.array(labels)
+print(labels.shape)
