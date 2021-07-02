@@ -7,7 +7,7 @@
 
 # This cell can be run to easily convert this notebook to a Python script:
 
-# In[ ]:
+# In[1]:
 
 
 get_ipython().system('jupyter nbconvert --to script SSNet_predictions_notebook.ipynb')
@@ -464,6 +464,10 @@ def grouped_plot(C=0, sections=2, reduce=0):
     
 
 
+# ### Performance
+# 
+# Visualizes each model/combiner's loss values on the training and testing datasets
+
 # In[ ]:
 
 
@@ -503,6 +507,8 @@ print([d[2] for d in imdb_data[:3]])
 imdb_data = [d[1:] for d in imdb_data]
 
 
+# ### Predictions
+
 # In[ ]:
 
 
@@ -537,7 +543,11 @@ ax.scatter(*points[:2], alpha=0.5, s=5, c=points[4], cmap='inferno')
 ax.axis('off')
 
 
-# In[234]:
+# ### Losses
+# 
+# Plot the distribution of loss values (absolute value of difference between predicted and actual value) for each model.
+
+# In[ ]:
 
 
 target = [0, 1, 2, 3]
@@ -557,6 +567,10 @@ x = plt.hist(losses, bins=15, alpha=1)
 
 np.array(prep_data(p[0])).shape
 
+
+# ### Prediction Distribution
+# 
+# Plot a histogram of the models' predictions.
 
 # In[ ]:
 
