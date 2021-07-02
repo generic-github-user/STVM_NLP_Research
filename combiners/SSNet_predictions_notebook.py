@@ -120,7 +120,7 @@ list(itertools.combinations('1234', 2))
 
 # ### Training Dictionary
 
-# In[5]:
+# In[6]:
 
 
 def get_training_dict(split):
@@ -146,8 +146,10 @@ def get_training_dict(split):
 JSON(get_training_dict("5K"))
 
 
-# In[6]:
+# In[7]:
 
+
+# Compile a list of text files containing reviews and their corresponding sentiment labels
 
 imdb_25k_list = list()
 data_dir = 'models/train'
@@ -172,7 +174,7 @@ model_weights = []
 # 
 # Train the predictors and return the results.
 
-# In[8]:
+# In[10]:
 
 
 def train_predictor():
@@ -228,7 +230,6 @@ def train_predictor():
 
                 te_list.append(df_dict)
 
-
             assert len(tr_list) == len(te_list), "train and test samples mismatch ...."
             tr_acc = -1.
             te_acc = -1.
@@ -279,6 +280,8 @@ def train_predictor():
                         te_list=te_list, imdb_te_list=imdb_25k_list)
 
         nn_metrics = []
+        
+#         Print summaries of the results for each combiner
         #print("Training Complete: ")
         print("Neural Network Combiner: ")
         for k, v in acc_dict_nn.items():
@@ -320,7 +323,7 @@ for i in range(1):
     trials.append(results)
 
 
-# In[12]:
+# In[ ]:
 
 
 def to_list(d):
@@ -339,7 +342,7 @@ for k, t in enumerate(trials):
                     trials[k][i][j][j2] = to_list(m2)
 
 
-# In[13]:
+# In[ ]:
 
 
 JSON(list(trials))
@@ -347,13 +350,13 @@ JSON(list(trials))
 
 # ## Visualization of Results
 
-# In[75]:
+# In[ ]:
 
 
 use_scienceplots = True
 
 
-# In[76]:
+# In[ ]:
 
 
 b = trials[0][0]
@@ -447,7 +450,7 @@ def grouped_plot(C=0, sections=2, reduce=0):
     
 
 
-# In[77]:
+# In[ ]:
 
 
 # Loop through the combiner indices and generate the graph for each one
@@ -455,12 +458,17 @@ for i in range(2):
     grouped_plot(C=i, sections=4, reduce=1)
 
 
-# In[167]:
+# In[ ]:
 
 
+# Read a CSV file and return a (nested) list of its rows (split on commas)
+# Params:
+#     filename: the name of the CSV file
+#     *or* [a and b]; the model number (e.g., "2") and dataset (e.g., "5ktrain")
 def read_csv(filename=None, a=None, b=None, s=1):
     if not filename:
         filename = f'./model_{int(a)}_{b}.csv'
+#     If file extension is missing, assume CSV
     if not filename.endswith('.csv'):
         filename += '.csv'
     with open(filename) as predictions:
@@ -470,7 +478,7 @@ def read_csv(filename=None, a=None, b=None, s=1):
         return data
 
 
-# In[166]:
+# In[ ]:
 
 
 imdb_data = []
@@ -481,7 +489,7 @@ print([d[2] for d in imdb_data[:3]])
 imdb_data = [d[1:] for d in imdb_data]
 
 
-# In[206]:
+# In[ ]:
 
 
 p = []
@@ -494,6 +502,7 @@ fig, ax = plt.subplots()
 # ax.set_xscale('log')
 # ax.set_yscale('log')
 
+# Load predictions for each model
 for f in list('1234'):
     p.append(read_csv(a=f, b=dataset))
 
@@ -501,11 +510,15 @@ for f in list('1234'):
 p.append(imdb_data)
 # p.append(read_csv(a='2', b=dataset))
 
+# Convert strings in data to floating-point numbers
 def prep_data(n):
     return [float(m[0]) for m in n if '.' in m[0]]
 
+# Prepare the data to graph
 points = [prep_data(n) for n in p]
 # ax.scatter(*points)
+
+# Draw the plot
 ax.scatter(*points[:2], alpha=0.5, s=5, c=points[4], cmap='inferno')
 ax.axis('off')
 
@@ -519,19 +532,19 @@ A = 1 / len(target)
 losses = []
 for t in target:
     ys = np.array(prep_data(imdb_data))
-    ys = np.random.randint(0, 2, ys.shape)
+#     ys = np.random.randint(0, 2, ys.shape)
     loss = np.abs(np.array(prep_data(p[t])) - np.array(ys))
     losses.append(loss)
 x = plt.hist(losses, bins=15, alpha=1)
 
 
-# In[218]:
+# In[ ]:
 
 
 np.array(prep_data(p[0])).shape
 
 
-# In[133]:
+# In[ ]:
 
 
 target = [0, 1, 2, 3]
@@ -543,7 +556,7 @@ plt.style.use('seaborn-deep')
 x = plt.hist([points[t] for t in target], bins=15)
 
 
-# In[155]:
+# In[ ]:
 
 
 p[3][:10]
