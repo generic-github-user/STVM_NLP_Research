@@ -52,7 +52,7 @@ Please note that this code has tensorflow dependencies.
 #  - `SSNet_Bayesian_Decision.py`
 #  - `SSNet_Heuristic_Hybrid.py`
 
-# In[13]:
+# In[2]:
 
 
 import tensorflow as tf
@@ -74,7 +74,7 @@ from SSNet_Bayesian_Decision import bayesian_decision
 from SSNet_Heuristic_Hybrid import heuristic_hybrid
 
 
-# In[2]:
+# In[3]:
 
 
 imdb_5ktr = 'imdb_train_5k.csv'
@@ -97,7 +97,7 @@ model_d_te = 'model_4_25ktest.csv'
 
 # ### Training Dict Threshold
 
-# In[3]:
+# In[4]:
 
 
 def get_training_dict_threshold(split):
@@ -112,7 +112,7 @@ def get_training_dict_threshold(split):
     return training_dict
 
 
-# In[4]:
+# In[5]:
 
 
 list(itertools.combinations('1234', 2))
@@ -164,7 +164,13 @@ for file_name in os.listdir(f'../{data_dir}/neg'):
 SAMPLE_SPLIT = ["5K"]
 
 
-# In[7]:
+# In[8]:
+
+
+len(imdb_25k_list)
+
+
+# In[9]:
 
 
 model_weights = []
@@ -308,6 +314,14 @@ def train_predictor():
             hh_metrics.append(v)
             
         return nn_metrics, bdr_metrics, hh_metrics
+
+
+# In[22]:
+
+
+W = [m[0] for m in model_weights[:7]]
+print(W)
+# plt.pcolormesh(model_weights)
 
 
 # ## Result Aggregation
