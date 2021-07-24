@@ -1,9 +1,10 @@
-from keras import backend as K
-from keras.layers import BatchNormalization, InputLayer, RepeatVector
-from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten
-from keras.models import Sequential
+import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import BatchNormalization, InputLayer, RepeatVector
+from tensorflow.keras.optimizers import *
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.layers import Dense, Activation, Dropout, Input, LSTM, Flatten
+from tensorflow.keras.models import Sequential
 import math
 import random
 import re
