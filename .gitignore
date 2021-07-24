@@ -1,2 +1,5 @@
 *-checkpoint.*
 models/train/*/*.txt
+imdb.vocab
+imdbEr.txt
+labeledBow.feat
