@@ -12,7 +12,6 @@ import pandas as pd
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf
 from tensorflow import keras
 import matplotlib
 matplotlib.use('agg')
@@ -21,6 +20,7 @@ matplotlib.use('agg')
 NUM_WORDS = 0
 DISCRIMINATOR_CUTOFF = 5
 L2_ETA = 0.019
+empty_indices = np.empty((0, 2), dtype=np.int64)
 
 # Load all data in a DataFrame.
 # shuffles the data to ensure good mix of postive and negative reviews
@@ -125,24 +125,41 @@ def load_datasets_from_file():
 
 def weighted_multi_hot_sequences(sequences):
     print("NUM_WORDS", NUM_WORDS)
-    results = np.zeros((len(sequences['reviews']), NUM_WORDS))
+#     results = np.zeros((len(sequences['reviews']), NUM_WORDS))
+    
     with open(os.path.join('..', 'imdbEr.txt'), 'r') as f:
         imdb_word_polarity = f.readlines()
 
+
     max = 0.0
     min = 0.0
+    indices = []
+    values = []
     for review_index, review in enumerate(sequences['reviews']):
       for word in review:
         word_index, word_count = word.split(':')
         cumulative_polarity = int(word_count) * \
             float(imdb_word_polarity[int(word_index)])
-        results[review_index, int(word_index)] = cumulative_polarity
+#         results[review_index, int(word_index)] = cumulative_polarity
+#         maybe assemble the lists of indices + values then generate the corresponding EagerTensor objects in a single TF operation?
+#         results.indices = tf.concat([results.indices, np.expand_dims([review_index, int(word_index)], 0)], 0)
+#         results.values = tf.concat([results.values, cumulative_polarity], 0)
+        indices.append([review_index, int(word_index)])
+        values.append(cumulative_polarity)
+
         #accumulate statistics for the dataset
         if cumulative_polarity > max:
           max = cumulative_polarity
         elif cumulative_polarity < min:
           min = cumulative_polarity
     print('Dataset encoding stats: MIN = %f, MAX = %f\n' % (min, max))
+    
+    results = tf.SparseTensor(
+        indices=indices,
+        values=values,
+        dense_shape=(len(sequences['reviews']), NUM_WORDS)
+    )
+    
     return results
 
 
