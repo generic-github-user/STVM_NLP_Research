@@ -110,7 +110,7 @@ def load_datasets_from_file():
   # Assumes this script runs from the top directory containing the test and
   # train directory.
   global NUM_WORDS
-  f = open("../imdb.vocab", "r")
+  f = open("../imdb.vocab", "r", encoding="UTF-8")
   imdb_vocab = f.readlines()
   NUM_WORDS = len(imdb_vocab)
   print('Vocabulary size is: %d words' % (NUM_WORDS))
