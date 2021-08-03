@@ -147,19 +147,24 @@ for split in SAMPLE_SPLIT:
         training_dict = get_training_dict(split)
         training_dict_threshold = get_training_dict_threshold(split)
 
-
+#     Create dictionaries to store the accuracy values for the neural network and bayesian decision combiners (bdc)
     acc_dict_nn = dict()
     acc_dict_bdc = dict()
     
+#     Loop through the different combinations of models
+#     During each iteration, k will be something like "model_{1,3}" and v will be the nested list described above the get_training_dict function
     for k, v in training_dict.items():
 
         tr_list = list()
         te_list = list()
 
+#         Recall that v[0] will be the list of filenames containing the predictions of each model (from this particular combination of models) on the training data...
         for i in range(len(v[0])):
+#             Create a pandas DataFrame containing each models' predictions
             df = pd.read_csv(v[0][i])
             df_dict = dict()
 
+#             Convert the table (DataFrame) to a dictionary
             for idx in df.index:
                 file_name = str(df['file'][idx])
                 proba = float(df['prob'][idx])
@@ -167,7 +172,9 @@ for split in SAMPLE_SPLIT:
             
             tr_list.append(df_dict)
 
+#         ...and likewise, v[1] will be the same for the testing data
         for i in range(len(v[1])):
+#             Refer to comments in training data processing loop
             df = pd.read_csv(v[1][i])
             df_dict = dict()
 
