@@ -111,9 +111,12 @@ def get_training_dict(split):
     return training_dict
 
 
-
+# Loop through dataset files in test directory;
+# for each, add the file name and its corresponding binary label (neg=0, pos=1) to the list
+# Note that each IMDB review from the dataset is stored in a separate text file
 imdb_25k_list = list()
 for file_name in os.listdir('../test/pos'):
+#     Ignore operating system files
     if file_name != '.DS_Store':
         imdb_25k_list.append([file_name, str(1)])
 
