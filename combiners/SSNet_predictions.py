@@ -33,17 +33,21 @@ import numpy as np
 import random
 import os
 
+# Import component models from the other scripts in this directory
 from SSNet_Neural_Network import nn
 from SSNet_Bayesian_Decision import bayesian_decision
 from SSNet_Heuristic_Hybrid import heuristic_hybrid
 
+# File names of the tables storing the models' predictions on each sample in the dataset(s)
 
+# Training
 imdb_5ktr = 'imdb_train_5k.csv'
 model_a_tr = 'model_a_5ktrain.csv'
 model_b_tr = 'model_b_5ktrain.csv'
 model_c_tr = 'model_c_bert_result_train_5k.csv'
 model_d_tr = 'model_d_use_result_train_5k.csv'
 
+# Testing
 model_a_te = 'model_a_25ktest.csv'
 model_b_te = 'model_b_25ktest.csv'
 model_c_te = 'model_c_bert_result_test_25k.csv'
@@ -236,6 +240,7 @@ for split in SAMPLE_SPLIT:
     hh_dict = heuristic_hybrid(tr_list=tr_list, imdb_tr_list=imdb_list,
                     te_list=te_list, imdb_te_list=imdb_25k_list)
 
+#     Print summaries of each base (component) model's accuracy (along with those of the combined models)
     
     #print("Training Complete: ")
     print("Neural Network Combiner: ")
