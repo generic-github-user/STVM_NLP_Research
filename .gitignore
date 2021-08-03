@@ -1,3 +1,5 @@
 *.txt
 *-checkpoint*
 *.pyc
+imdb.vocab
+labeledBow.feat

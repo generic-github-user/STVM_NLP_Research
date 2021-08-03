@@ -183,6 +183,7 @@ assert SAMPLE_SIZE_VLD == VALIDATION_SAMPLE, 'validation sample not complete....
 
 df_train = df_train.sample(frac=1)
 
+# TODO: replace hardcoded vocabulary size ints with vars
 train_y = np.zeros([TRAINING_SAMPLE, 1], dtype=np.int)
 train_x = np.zeros([TRAINING_SAMPLE, 89527], dtype=np.float64)
 validation_y = np.zeros([VALIDATION_SAMPLE, 1], dtype=np.int)
@@ -207,6 +208,7 @@ for index in df_validation.index:
     validation_x[index] = train_data_mhe[index_in_files_list]
     validation_y[index] = label
 
+# Build the model with the Keras layers API
 model = Sequential()
 
 model.add(Dense(256, activation="relu", kernel_regularizer=keras.regularizers.l2(
