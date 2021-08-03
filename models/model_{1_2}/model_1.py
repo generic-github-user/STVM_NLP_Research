@@ -233,13 +233,24 @@ train_x = tf.SparseTensor(indices=xt_indices, values=xt_values, dense_shape=[TRA
 # print(train_x[0])
 # print(train_y[0])
 
+xv_indices, xv_values = [], []
+yv_indices, yv_values = [], []
 for index in df_validation.index:
     file_name = str(df_validation['file'][index])
     label = int(df_validation['label'][index])
 
     index_in_files_list = train_files_list.index(file_name)
-    validation_x[index] = train_data_mhe[index_in_files_list]
-    validation_y[index] = label
+#     validation_x[index] = train_data_mhe[index_in_files_list]
+#     validation_y[index] = label
+    xv_indices.append(index)
+    xv_values.append(train_data_mhe[index_in_files_list])
+    
+    yv_indices.append(index)
+    yv_values.append(label)
+
+validation_y = tf.SparseTensor(indices=yv_indices, values=yv_values, dense_shape=[VALIDATION_SAMPLE, 1])
+validation_x = tf.SparseTensor(indices=xv_indices, values=xv_values, dense_shape=[VALIDATION_SAMPLE, 89527])
+
 
 model = Sequential()
 
