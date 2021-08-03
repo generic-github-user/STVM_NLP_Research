@@ -63,8 +63,13 @@ def get_training_dict_threshold(split):
         
     return training_dict
 
+# Get a dictionary where:
+# The keys list possible combinations of models (between two and four)
+# The corresponding values list those models' predictions on the training and testing data (again, these are nested lists)
 def get_training_dict(split):
     training_dict = dict()
+    
+#     The default split is "5K" again
     if split == "5K":
         training_dict["model_{1,2}"] = [
             [model_a_tr, model_b_tr], [model_a_te, model_b_te]
