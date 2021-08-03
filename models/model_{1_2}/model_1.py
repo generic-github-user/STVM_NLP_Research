@@ -185,8 +185,8 @@ print(train_data['reviews'].iloc[0])
 train_data_mhe = weighted_multi_hot_sequences(train_data)
 print(train_data_mhe.shape)
 
-print(train_data_mhe[0])
-print(len(train_data_mhe[0]))
+# print(train_data_mhe[0])
+# print(len(train_data_mhe[0]))
 
 TRAINING_SAMPLE = 20000
 VALIDATION_SAMPLE = 5000
@@ -201,21 +201,37 @@ assert SAMPLE_SIZE_VLD == VALIDATION_SAMPLE, 'validation sample not complete....
 
 df_train = df_train.sample(frac=1)
 
-train_y = np.zeros([TRAINING_SAMPLE, 1], dtype=np.int)
-train_x = np.zeros([TRAINING_SAMPLE, 89527], dtype=np.float64)
-validation_y = np.zeros([VALIDATION_SAMPLE, 1], dtype=np.int)
-validation_x = np.zeros([VALIDATION_SAMPLE, 89527], dtype=np.float64)
+# train_y = np.zeros([TRAINING_SAMPLE, 1], dtype=np.int)
+# train_x = np.zeros([TRAINING_SAMPLE, 89527], dtype=np.float64)
+# validation_y = np.zeros([VALIDATION_SAMPLE, 1], dtype=np.int)
+# validation_x = np.zeros([VALIDATION_SAMPLE, 89527], dtype=np.float64)
 
+# Generate empty SparseTensors
+# train_y = tf.SparseTensor(indices=empty_indices, values=[], dense_shape=[TRAINING_SAMPLE, 1])
+# train_x = tf.SparseTensor(indices=empty_indices, values=[], dense_shape=[TRAINING_SAMPLE, 89527])
+# validation_y = tf.SparseTensor(indices=empty_indices, values=[], dense_shape=[VALIDATION_SAMPLE, 1])
+# validation_x = tf.SparseTensor(indices=empty_indices, values=[], dense_shape=[VALIDATION_SAMPLE, 89527])
+# todo: add option
+
+xt_indices, xt_values = [], []
+yt_indices, yt_values = [], []
 for index in df_train.index:
     file_name = str(df_train['file'][index])
     label = int(df_train['label'][index])
 
     index_in_files_list = train_files_list.index(file_name)
-    train_x[index] = train_data_mhe[index_in_files_list]
-    train_y[index] = label
+#     train_x[index] = train_data_mhe[index_in_files_list]
+#     train_y[index] = label
+    xt_indices.append(index)
+    xt_values.append(train_data_mhe[index_in_files_list])
+    
+    yt_indices.append(index)
+    yt_values.append(label)
 
-print(train_x[0])
-print(train_y[0])
+train_y = tf.SparseTensor(indices=yt_indices, values=yt_values, dense_shape=[TRAINING_SAMPLE, 1])
+train_x = tf.SparseTensor(indices=xt_indices, values=xt_values, dense_shape=[TRAINING_SAMPLE, 89527])
+# print(train_x[0])
+# print(train_y[0])
 
 for index in df_validation.index:
     file_name = str(df_validation['file'][index])
