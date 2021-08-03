@@ -21,7 +21,7 @@ SSNet authors and developers:
 '''
 This is master file that runs all the three combiners proposed in the paper. 
 Use following snippet to run all the three combiners: python SSNet_predictions.py
-Please note that this code has tensoflow dependencies.
+Please note that this code has TensorFlow as a dependency.
 '''
 
 import tensorflow as tf
