@@ -190,8 +190,8 @@ print(len(train_data_mhe[0]))
 
 TRAINING_SAMPLE = 20000
 VALIDATION_SAMPLE = 5000
-df_train = pd.read_csv('imdb_train_20k.csv')
-df_validation = pd.read_csv('imdb_train_5k.csv')
+df_train = pd.read_csv('../../data/imdb_train_split_20000.csv')
+df_validation = pd.read_csv('../../data/imdb_train_split_5000.csv')
 SAMPLE_SIZE_TRD = len(df_train)
 SAMPLE_SIZE_VLD = len(df_validation)
 print(df_train.head())
