@@ -192,7 +192,8 @@ for split in SAMPLE_SPLIT:
         while True:
             tr_acc, te_acc, weights = nn(tr_list=tr_list, imdb_tr_list=imdb_list,
                 te_list=te_list, imdb_te_list=imdb_25k_list)
-            
+
+#             Check to see if the weights have collapsed to 0 (the loop will continue running until this does not happen)
             if weights[0][0] == 0. or weights[0][1] == 0.:
                 print("bad event ...., training again")
                 print("\t" +k)
@@ -204,7 +205,8 @@ for split in SAMPLE_SPLIT:
         acc_dict_bdc[k] = bayesian_decision(tr_list=tr_list, imdb_tr_list=imdb_list,
                                          te_list=te_list, imdb_te_list=imdb_25k_list)
 
-    
+#     Loop through splits in training_dict_threshold (probably just "5K");
+#     Assemble lists (for both the training and testing data) of dictionaries containing each model's predictions on each sample in the dataset (see comments above for more information, as the code is quite similar)
     for k, v in training_dict_threshold.items():
         tr_list = list()
         te_list = list()
