@@ -1,5 +1,6 @@
 *.txt
-*-checkpoint*
+*-checkpoint.*
 *.pyc
 imdb.vocab
 labeledBow.feat
+models/train/*/*.txt
